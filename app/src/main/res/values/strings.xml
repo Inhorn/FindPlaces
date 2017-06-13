@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">FindPlaces</string>
+    <string name="search">Search</string>
+    <string name="input_city">input city</string>
+    <string name="input_category">input category</string>
+    <string name="string_open">Open</string>
+    <string name="string_close">Close</string>
+    <string name="Select_Category">Category</string>
+    <string name="select_search">Select Search</string>
+    <string name="select_category">Select Category</string>
+    <string name="select_radius">Select Radius</string>
+    <string name="current_version_1_0">Current version: 1.0</string>
+    <string name="navigate">Navigate</string>
+    <string name="enable_gps">You must enabled GPS</string>
+    <string name="phone_not_available">Phone not available</string>
+    <string name="here">Here</string>
+    <string name="working_hours">Working hours is unknown</string>
+    <string name="website_available">Website is not available</string>
+
+
+    <string-array name="categories_array">
+
+        <item>Bank</item>
+        <item>Bar</item>
+        <item>Cafe</item>
+        <item>Castle</item>
+        <item>Church</item>
+        <item>Department store</item>
+        <item>Food</item>
+        <item>Monument</item>
+        <item>Movie Theater</item>
+        <item>Museum</item>
+        <item>Parking</item>
+        <item>Hospital</item>
+        <item>Pharmacy</item>
+        <item>Police</item>
+        <item>Restaurant</item>
+        <item>Store</item>
+        <item>Subway Station</item>
+        <item>Theater</item>
+        <item>Zoo</item>
+
+    </string-array>
+
+    <string-array name="type_search_array">
+
+        <item>Nearest Places</item>
+        <item>Text Search</item>
+
+    </string-array>
+
+    <string-array name="radius_array">
+        <item>1 km</item>
+        <item>2 km</item>
+        <item>5 km</item>
+        <item>10 km</item>
+        <item>20 km</item>
+        <item>50 km</item>
+
+    </string-array>
+</resources>

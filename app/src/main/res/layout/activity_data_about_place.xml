@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_data_about_place"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="babiy.findplaces.DataAboutPlaceActivity">
+
+    <ScrollView
+        android:layout_margin="10dp"
+        android:layout_width="400dp"
+        android:layout_height="400dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <fragment
+                android:id="@+id/mapOfPlace"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="160dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mapOfPlace"
+                android:layout_alignParentStart="true"
+                android:id="@+id/tvNameOfPlace"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvNameOfPlace"
+                android:layout_alignParentStart="true"
+                android:id="@+id/tvAddressOfPlace"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="normal|italic" />
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvAddressOfPlace"
+                android:layout_alignParentStart="true"
+                android:id="@+id/tvPhoneOfPlace"
+                android:textColor="@android:color/black"
+                android:layout_width="150dp"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/star_big_on"
+                android:layout_below="@+id/tvAddressOfPlace"
+                android:layout_toEndOf="@+id/tvOpeningOgPlace"
+                android:id="@+id/imageView3"
+                android:layout_alignBottom="@+id/tvOpeningOgPlace"
+                android:layout_width="30dp" />
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvAddressOfPlace"
+                android:layout_toEndOf="@+id/tvPhoneOfPlace"
+                android:id="@+id/tvOpeningOgPlace"
+                android:textAlignment="center"
+                android:layout_width="100dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvAddressOfPlace"
+                android:id="@+id/tvRatingOfPlace"
+                android:layout_alignParentEnd="true"
+                android:layout_width="71dp"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="16sp"
+                android:textAlignment="textEnd" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvWebsiteOfPlace"
+                android:layout_below="@+id/tvPhoneOfPlace"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvHoursOfPlace"
+                android:textColor="@android:color/black"
+                android:layout_below="@+id/tvWebsiteOfPlace"
+                android:layout_alignParentStart="true"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+    <Button
+        android:text="@string/navigate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnNavigate"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="34dp" />
+
+
+</RelativeLayout>

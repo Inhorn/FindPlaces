@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvName"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvAddress"
+        android:textSize="18sp"
+        android:textStyle="normal|italic"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDistance"
+            android:layout_weight="1"
+            android:layout_width="100dp"
+            android:textSize="18sp"
+            android:textColor="?attr/colorPrimaryDark" />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvOpening"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"
+            android:textAllCaps="false" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            app:srcCompat="@android:drawable/btn_star_big_on"
+            android:id="@+id/imageView"
+            android:layout_height="25dp"
+            android:contentDescription="" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/tvRating"
+            android:layout_weight="0.13"
+            android:textSize="18sp"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textAlignment="viewStart"
+            android:layout_width="80dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
