@@ -52,16 +52,6 @@ public class StartActivity extends FragmentActivity {
         } else {
             ActivityCompat.requestPermissions(this, INITIAL_PERMS, INITIAL_REQUEST);
         }
-
-        /*SmartLocation.with(this).location()
-                .oneFix()
-                .start(new OnLocationUpdatedListener() {
-                    @Override
-                    public void onLocationUpdated(Location location) {
-                        handleNewLocation(location);
-
-                    }
-                });*/
     }
 
     public void enableGPS() {
@@ -113,8 +103,8 @@ public class StartActivity extends FragmentActivity {
 
     private void handleNewLocation(Location location) {
 
-        final String currentLat = String.valueOf(location.getLatitude());
-        final String currentLng = String.valueOf(location.getLongitude());
+        final double currentLat = location.getLatitude();
+        final double currentLng = location.getLongitude();
 
         new Handler().postDelayed(new Runnable() {
 
@@ -125,7 +115,6 @@ public class StartActivity extends FragmentActivity {
                         .putExtra("Get currentLng", currentLng);
                 finish();
                 startActivity(intent);
-
 
             }
         }, SPLASH_TIME_OUT);

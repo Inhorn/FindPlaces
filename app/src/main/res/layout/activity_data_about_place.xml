@@ -12,9 +12,11 @@
     tools:context="babiy.findplaces.DataAboutPlaceActivity">
 
     <ScrollView
-        android:layout_margin="10dp"
         android:layout_width="400dp"
-        android:layout_height="400dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="420dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -107,15 +109,6 @@
 
 
     </ScrollView>
-
-    <Button
-        android:text="@string/navigate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnNavigate"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp" />
 
 
 </RelativeLayout>

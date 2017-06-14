@@ -14,45 +14,33 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.gms.maps.model.LatLng;
 
 import babiy.findplaces.utils.InternetConnection;
-import babiy.findplaces.utils.Keys;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String PLACE_ID_URL = "http://maps.googleapis.com/maps/api/geocode/json?address=%22";
     private static final String TAG = "";
 
-    private EditText etCity;
 
     public String city;
     public String category;
     public String search;
     public String radius;
-    private RequestQueue requestQueue;
-    private String latOfCity;
-    private String lngOfCity;
+    private double latOfCity;
+    private double lngOfCity;
     private Spinner spinnerCategory;
     private Spinner spinnerSearch;
     private Spinner spinnerRadius;
-    private String currentLat;
-    private String currentLng;
+    private double currentLat;
+    private double currentLng;
     private TextView tvNameOfRadius;
-    String st;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -67,7 +55,9 @@ public class MainActivity extends AppCompatActivity {
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
-                st = (String) place.getName();
+                LatLng location = place.getLatLng();
+                latOfCity = location.latitude;
+                lngOfCity = location.longitude;
             }
 
             @Override
@@ -77,13 +67,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-        etCity = (EditText) findViewById(R.id.etCity);
-        etCity.setVisibility(View.INVISIBLE);
         tvNameOfRadius = (TextView) findViewById(R.id.tvNameOfRadius);
-        requestQueue = Volley.newRequestQueue(this);
 
         Button btnSearch;
         btnSearch = (Button) findViewById(R.id.btnSearch);
@@ -92,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
         spinnerSearch = (Spinner) findViewById(R.id.type_search_spinner);
         spinnerRadius = (Spinner) findViewById(R.id.radius_spinner);
 
-        currentLat = getIntent().getStringExtra("Get currentLat");
-        currentLng = getIntent().getStringExtra("Get currentLng");
+        currentLat = getIntent().getDoubleExtra("Get currentLat", 0);
+        currentLng = getIntent().getDoubleExtra("Get currentLng", 0);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.categories_array, android.R.layout.simple_spinner_item);
@@ -119,22 +103,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 search = spinnerSearch.getSelectedItem().toString();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.setCustomAnimations(android.R.animator.fade_in,
+                        android.R.animator.fade_out);
                 if (search.equals("Text Search")) {
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.setCustomAnimations(android.R.animator.fade_in,
-                            android.R.animator.fade_out);
-                    ft.hide(autocompleteFragment);
-                    ft.commit();
-                    etCity.setVisibility(View.VISIBLE);
-                    spinnerRadius.setVisibility(View.INVISIBLE);
-                    tvNameOfRadius.setVisibility(View.INVISIBLE);
+
+                    ft.show(autocompleteFragment);
 
                 } else {
-                    etCity.setVisibility(View.INVISIBLE);
                     spinnerRadius.setVisibility(View.VISIBLE);
                     tvNameOfRadius.setVisibility(View.VISIBLE);
-                    etCity.setText("");
+                    ft.hide(autocompleteFragment);
                 }
+                ft.commit();
             }
 
             @Override
@@ -184,22 +165,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                city = String.valueOf(etCity.getText()).trim();
+
 
                 if (InternetConnection.checkConnection(getApplicationContext())) {
+                    Intent intent;
 
-                    if (city.equals("")) {
-                        Intent intent = new Intent(MainActivity.this, DisplayOfResultsActivity.class);
+                    if (search.equals("Nearest Places")) {
+                        intent = new Intent(MainActivity.this, DisplayOfResultsActivity.class);
                         intent.putExtra("Category for search", category)
                                 .putExtra("Get currentLat", currentLat)
                                 .putExtra("Get currentLng", currentLng)
-                                .putExtra("Get radius", radius)
-                                .putExtra("GetTypeSearch", search);
-                        String r = st;
-
+                                .putExtra("Get radius", radius);
                         startActivity(intent);
                     } else {
-                        getPositionOfCity();
+                        intent = new Intent(MainActivity.this, DisplayOfResultsActivity.class);
+                        intent.putExtra("City for search", city)
+                                .putExtra("Get radius", radius)
+                                .putExtra("Get currentLat", latOfCity)
+                                .putExtra("Get currentLng", lngOfCity)
+                                .putExtra("Category for search", category);
+                        startActivity(intent);
 
                     }
 
@@ -211,51 +196,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void getPositionOfCity() {
-
-        String url = PLACE_ID_URL + city;
-
-        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-
-                            latOfCity = response.getJSONArray(Keys.KEY_RESULT).getJSONObject(0)
-                                    .getJSONObject(Keys.KEY_GEOMETRY)
-                                    .getJSONObject(Keys.KEY_LOCATION)
-                                    .getString(Keys.KEY_LOCATION_LAT);
-
-                            lngOfCity = response.getJSONArray(Keys.KEY_RESULT).getJSONObject(0)
-                                    .getJSONObject(Keys.KEY_GEOMETRY)
-                                    .getJSONObject(Keys.KEY_LOCATION)
-                                    .getString(Keys.KEY_LOCATION_LNG);
-
-                            Intent intent = new Intent(MainActivity.this, babiy.findplaces.DisplayOfResultsActivity.class);
-                            intent.putExtra("City for search", city)
-                                    .putExtra("Category for search", category)
-                                    .putExtra("getLat", latOfCity)
-                                    .putExtra("getLng", lngOfCity)
-                                    .putExtra("GetTypeSearch", search);
-
-                            startActivity(intent);
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
-                    }
-                }
-        );
-
-        requestQueue.add(getRequest);
-    }
 }

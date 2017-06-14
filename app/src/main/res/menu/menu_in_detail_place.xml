@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="@string/navigate"
+        android:id="@+id/menu_navigate"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_option_menu_navigation"
+        />
+    <item android:title="@string/call"
+        android:id="@+id/menu_call"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_option_menu_call"
+        />
+</menu>

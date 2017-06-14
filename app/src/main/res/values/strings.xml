@@ -16,6 +16,7 @@
     <string name="here">Here</string>
     <string name="working_hours">Working hours is unknown</string>
     <string name="website_available">Website is not available</string>
+    <string name="call">Call</string>
 
 
     <string-array name="categories_array">

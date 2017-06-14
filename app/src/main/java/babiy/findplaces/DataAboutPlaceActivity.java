@@ -7,9 +7,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,7 +36,7 @@ import babiy.findplaces.utils.Utils;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
 
-public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private static final String MAIN_URL = "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
@@ -83,7 +86,7 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
         tvOpening = (TextView) findViewById(R.id.tvOpeningOgPlace);
         tvRating = (TextView) findViewById(R.id.tvRatingOfPlace);
         tvHours = (TextView) findViewById(R.id.tvHoursOfPlace);
-        if (tvWebsite.getText() != getString(R.string.website_available)){
+        if (tvWebsite.getText() != getString(R.string.website_available)) {
             tvWebsite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -94,7 +97,6 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
             });
         }
 
-
         SmartLocation.with(this).location()
                 .oneFix()
                 .start(new OnLocationUpdatedListener() {
@@ -102,30 +104,41 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
                     public void onLocationUpdated(Location location) {
                         lat = location.getLatitude();
                         lng = location.getLongitude();
-
                     }
                 });
+    }
 
-        btnNavigate = (Button) findViewById(R.id.btnNavigate);
-        btnNavigate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW,
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_in_detail_place, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.menu_navigate:
+                intent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse("google.navigation:q=" + latOfPlace + "," + lngOfPlace + "&mode=w"));
                 intent.setPackage("com.google.android.apps.maps");
-                if (intent.resolveActivity(getPackageManager()) == null){
-                    /*String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f (%s)",
-                            lat, lng, 15, latOfPlace, lngOfPlace, "here");
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                    startActivity(intent);*/
+                if (intent.resolveActivity(getPackageManager()) == null) {
                     intent = new Intent(android.content.Intent.ACTION_VIEW,
                             Uri.parse("http://maps.google.com/maps?saddr=" + lat + "," + lng + "&daddr=" + latOfPlace + "," + lngOfPlace));
-
                 }
                 startActivity(intent);
+                break;
+            case R.id.menu_call:
+                if (tvPhone.getText() != getString(R.string.phone_not_available)) {
+                    intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
+                            "tel", String.valueOf(tvPhone.getText()), null));
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, getString(R.string.phone_not_available), Toast.LENGTH_SHORT).show();
+                }
+        }
 
-            }
-        });
+        return super.onOptionsItemSelected(item);
     }
 
     public void getDetailInformation(String id) {
@@ -143,16 +156,16 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
 
                             String name = response.getJSONObject(Keys.KEY_DETAIL_RESULT).getString(Keys.KEY_NAME);
                             String phoneNumber = getString(R.string.phone_not_available);
-                            if(response.toString().contains(Keys.KEY_PHONE_NUMBER)){
+                            if (response.toString().contains(Keys.KEY_PHONE_NUMBER)) {
                                 phoneNumber = jsonObject.getString(Keys.KEY_PHONE_NUMBER);
                             }
                             String address = jsonObject.getString(Keys.KEY_ADDRESS);
                             String website = getString(R.string.website_available);
-                            if (response.toString().contains(Keys.KEY_WEBSITE)){
+                            if (response.toString().contains(Keys.KEY_WEBSITE)) {
                                 website = jsonObject.getString(Keys.KEY_WEBSITE);
                             }
                             String opening = "";
-                            if (response.toString().contains(Keys.KEY_OPENING)){
+                            if (response.toString().contains(Keys.KEY_OPENING)) {
                                 opening = jsonObject.getJSONObject(Keys.KEY_OPENING_HOURS)
                                         .getString(Keys.KEY_OPENING);
                             }
@@ -161,7 +174,7 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
                                 rating = jsonObject.getString(Keys.KEY_RATING);
                             }
                             String[] weekDayHours = new String[7];
-                            if (response.toString().contains(Keys.KEY_WEEK_DAY_HOURS)){
+                            if (response.toString().contains(Keys.KEY_WEEK_DAY_HOURS)) {
                                 for (int i = 0; i < 7; i++) {
                                     weekDayHours[i] = jsonObject.getJSONObject(Keys.KEY_OPENING_HOURS)
                                             .getJSONArray(Keys.KEY_WEEK_DAY_HOURS)
@@ -170,11 +183,11 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
                             }
 
                             StringBuilder sb = new StringBuilder();
-                            for (String s : weekDayHours){
+                            for (String s : weekDayHours) {
                                 sb.append(s + '\n');
                             }
                             String hoursOfPlace = sb.toString();
-                            if (hoursOfPlace.contains("null")){
+                            if (hoursOfPlace.contains("null")) {
                                 hoursOfPlace = getString(R.string.working_hours);
                             }
                             tvName.setText(name);
@@ -182,7 +195,7 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
                             tvPhone.setText(phoneNumber);
                             tvRating.setText(rating);
                             tvWebsite.setText(website);
-                            if (opening.equals("true")){
+                            if (opening.equals("true")) {
                                 tvOpening.setText(getString(R.string.string_open));
                                 tvOpening.setTextColor(Color.GREEN);
                             } else {

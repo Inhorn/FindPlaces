@@ -11,34 +11,6 @@
     tools:context="babiy.findplaces.MainActivity">
 
 
-    <EditText
-        android:id="@+id/etCity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/type_search_spinner"
-        android:ems="10"
-        android:hint="@string/input_city"
-        android:inputType="textPersonName" />
-
-    <Spinner
-        android:id="@+id/type_search_spinner"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="24dp" />
-
-    <TextView
-        android:text="@string/select_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tNameOfCategory"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:layout_below="@+id/etCity"
-        android:layout_alignStart="@+id/tvNameOfSearch" />
-
     <Spinner
         android:id="@+id/categories_spinner"
         android:layout_width="200dp"
@@ -65,6 +37,17 @@
         android:layout_marginBottom="41dp" />
 
     <TextView
+        android:text="@string/select_radius"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvNameOfRadius"
+        android:textSize="16sp"
+
+        android:textColor="@android:color/black"
+
+        android:layout_alignStart="@+id/radius_spinner" />
+
+    <TextView
         android:text="@string/select_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,23 +57,32 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
+    <Spinner
+        android:id="@+id/type_search_spinner"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNameOfRadius"
+        android:layout_alignParentStart="true" />
+
     <TextView
-        android:text="@string/select_radius"
+        android:text="@string/select_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvNameOfRadius"
+        android:id="@+id/tNameOfCategory"
         android:textSize="16sp"
         android:textColor="@android:color/black"
-        android:layout_below="@+id/etCity"
-        android:layout_alignStart="@+id/radius_spinner" />
+
+        android:layout_below="@+id/type_search_spinner"
+        android:layout_alignParentStart="true" />
 
     <fragment
         android:id="@+id/place_autocomplete_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:layout_marginTop="59dp"
+        android:visibility="invisible"
         android:layout_below="@+id/categories_spinner"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="57dp" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
