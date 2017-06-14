@@ -167,7 +167,7 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
                                 double distance = meterDistanceBetweenPoints(parsCurrentLat, parsCurrentLng, latOfPlace, lngOfPlace);
                                 data.setDistance(distance);
                                 list.add(data);
-
+                                progressDialog.setProgress(list.size());
                             }
 
                             if (nextPage != null) {

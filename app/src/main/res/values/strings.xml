@@ -31,8 +31,9 @@
         <item>Monument</item>
         <item>Movie Theater</item>
         <item>Museum</item>
-        <item>Parking</item>
         <item>Hospital</item>
+        <item>Pab</item>
+        <item>Parking</item>
         <item>Pharmacy</item>
         <item>Police</item>
         <item>Restaurant</item>
@@ -45,8 +46,8 @@
 
     <string-array name="type_search_array">
 
-        <item>Nearest Places</item>
         <item>Text Search</item>
+        <item>Nearest Places</item>
 
     </string-array>
 

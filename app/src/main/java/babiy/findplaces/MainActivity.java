@@ -165,8 +165,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
                 if (InternetConnection.checkConnection(getApplicationContext())) {
                     Intent intent;
 
@@ -187,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
 
                     }
-
 
                 } else {
                     Toast.makeText(MainActivity.this, "no internet connection", Toast.LENGTH_SHORT).show();
