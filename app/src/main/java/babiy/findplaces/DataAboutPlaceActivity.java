@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,8 +31,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 import babiy.findplaces.utils.Keys;
-import babiy.findplaces.utils.Utils;
+
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
 
@@ -42,25 +44,21 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
     private static final String MAIN_URL = "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
     private static final String API_KEY = "AIzaSyDaX8zPnlWyMPed3SgdjuSzmU8JzZwQ-es";
 
-    RequestQueue requestQueue;
+    private RequestQueue requestQueue;
+    private SupportMapFragment myGoogleMap;
+    private double latOfPlace;
+    private double lngOfPlace;
+    private TextView tvName;
+    private TextView tvAddress;
+    private TextView tvPhone;
+    private TextView tvWebsite;
+    private TextView tvOpening;
 
-    SupportMapFragment myGoogleMap;
-
-    double latOfPlace;
-    double lngOfPlace;
-
-    TextView tvName;
-    TextView tvAddress;
-    TextView tvPhone;
-    TextView tvWebsite;
-    TextView tvOpening;
-    TextView tvRating;
-    TextView tvHours;
-
-    Button btnNavigate;
-    double lat;
-    double lng;
+    private TextView tvHours;
+    private double lat;
+    private double lng;
     private String language;
+    private RatingBar ratingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +66,15 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
         setContentView(R.layout.activity_data_about_place);
 
         requestQueue = Volley.newRequestQueue(this);
-        language = Utils.getLocale();
+        language = Locale.getDefault().getLanguage();
 
         String idOfPlace = getIntent().getStringExtra("place_id");
         latOfPlace = (double) getIntent().getFloatExtra("get latOfPlace", 0);
         lngOfPlace = (double) getIntent().getFloatExtra("get lngOfPlace", 0);
 
         getDetailInformation(idOfPlace);
+
+        ratingBar = (RatingBar) findViewById(R.id.ratingBarInDetail);
 
         myGoogleMap = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapOfPlace);
         myGoogleMap.getMapAsync(this);
@@ -84,7 +84,7 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
         tvPhone = (TextView) findViewById(R.id.tvPhoneOfPlace);
         tvWebsite = (TextView) findViewById(R.id.tvWebsiteOfPlace);
         tvOpening = (TextView) findViewById(R.id.tvOpeningOgPlace);
-        tvRating = (TextView) findViewById(R.id.tvRatingOfPlace);
+
         tvHours = (TextView) findViewById(R.id.tvHoursOfPlace);
         if (tvWebsite.getText() != getString(R.string.website_available)) {
             tvWebsite.setOnClickListener(new View.OnClickListener() {
@@ -193,7 +193,7 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
                             tvName.setText(name);
                             tvAddress.setText(address);
                             tvPhone.setText(phoneNumber);
-                            tvRating.setText(rating);
+
                             tvWebsite.setText(website);
                             if (opening.equals("true")) {
                                 tvOpening.setText(getString(R.string.string_open));
@@ -203,11 +203,11 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
                                 tvOpening.setTextColor(Color.RED);
                             }
                             tvHours.setText(hoursOfPlace);
+                            ratingBar.setRating(Float.parseFloat(rating));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 },
 
@@ -222,13 +222,11 @@ public class DataAboutPlaceActivity extends AppCompatActivity implements OnMapRe
         requestQueue.add(getRequest);
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.addMarker(new MarkerOptions().position(new LatLng(latOfPlace, lngOfPlace)).title(getString(R.string.here)));
         CameraPosition liberty = CameraPosition.builder().target(new LatLng(latOfPlace, lngOfPlace)).zoom(15).bearing(0).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(liberty));
-
     }
 }
 

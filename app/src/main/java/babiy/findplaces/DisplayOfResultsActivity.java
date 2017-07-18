@@ -2,13 +2,16 @@ package babiy.findplaces;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -24,12 +27,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 import babiy.findplaces.adapter.MyResultAdapter;
 import babiy.findplaces.model.DataOfPlace;
 import babiy.findplaces.utils.DistanceComparator;
 import babiy.findplaces.utils.Keys;
-import babiy.findplaces.utils.Utils;
 
 public class DisplayOfResultsActivity extends AppCompatActivity {
 
@@ -42,12 +45,13 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
     private double currentLng;
 
     private RequestQueue requestQueue;
-    private TextView textView;
+
     private String nextPage, mCategory, mRadius;
     private ProgressDialog progressDialog;
     private ListView lvList;
     private MyResultAdapter adapter;
     private String language;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +63,9 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
         adapter = new MyResultAdapter(this, list);
         requestQueue = Volley.newRequestQueue(this);
         lvList.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        textView = (TextView) findViewById(R.id.tvListSize);
-        language = Utils.getLocale();
+
+
+        language = Locale.getDefault().getLanguage();
         mCategory = getIntent().getStringExtra("Category for search");
 
         progressDialog = new ProgressDialog(DisplayOfResultsActivity.this);
@@ -76,7 +80,6 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 DataOfPlace information = list.get(position);
-
                 Intent intent = new Intent(DisplayOfResultsActivity.this, DataAboutPlaceActivity.class);
                 intent.putExtra("place_id", information.getId())
                         .putExtra("get latOfPlace", information.getLocationLat())
@@ -86,9 +89,8 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
             }
         });
 
-
-        currentLat = getIntent().getDoubleExtra("Get currentLat",0);
-        currentLng = getIntent().getDoubleExtra("Get currentLng",0);
+        currentLat = getIntent().getDoubleExtra("Get currentLat", 0);
+        currentLng = getIntent().getDoubleExtra("Get currentLng", 0);
         mRadius = getIntent().getStringExtra("Get radius");
         nearbySearch(currentLat, currentLng, nextPage);
 
@@ -106,7 +108,6 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
             url = NEARBY_URL + "&key=" + MY_KEY + "&pagetoken=" + parsNextPage;
         }
 
-
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -118,16 +119,15 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
                                 nextPage = response.getString(Keys.KEY_NEXT_PAGE);
                             } else {
                                 nextPage = null;
-                                list = sortByDistance(list);
-
                                 progressDialog.dismiss();
                                 lvList.setVisibility(View.VISIBLE);
+                                adapter.notifyDataSetChanged();
                             }
 
                             JSONArray jsonArray = response.getJSONArray(Keys.KEY_RESULT);
 
                             for (int indexJson = 0; indexJson < jsonArray.length(); indexJson++) {
-                                DataOfPlace data = new DataOfPlace();
+                                final DataOfPlace data = new DataOfPlace();
 
                                 JSONObject innerObject = jsonArray.getJSONObject(indexJson);
 
@@ -167,7 +167,7 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
                                 double distance = meterDistanceBetweenPoints(parsCurrentLat, parsCurrentLng, latOfPlace, lngOfPlace);
                                 data.setDistance(distance);
                                 list.add(data);
-                                progressDialog.setProgress(list.size());
+                                list = sortByDistance(list);
                             }
 
                             if (nextPage != null) {
@@ -182,9 +182,6 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             e.printStackTrace();
                         }
-
-                        textView.setText(String.valueOf(list.size()));
-
                     }
                 },
 

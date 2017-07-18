@@ -20,20 +20,23 @@
 
 
     <string-array name="categories_array">
-
+        <item>ATM</item>
         <item>Bank</item>
         <item>Bar</item>
+        <item>Bus station</item>
         <item>Cafe</item>
         <item>Castle</item>
         <item>Church</item>
         <item>Department store</item>
         <item>Food</item>
-        <item>Monument</item>
+        <item>Gas station</item>
         <item>Movie Theater</item>
         <item>Museum</item>
         <item>Hospital</item>
+        <item>Lodging</item>
         <item>Pab</item>
         <item>Parking</item>
+        <item>Park</item>
         <item>Pharmacy</item>
         <item>Police</item>
         <item>Restaurant</item>

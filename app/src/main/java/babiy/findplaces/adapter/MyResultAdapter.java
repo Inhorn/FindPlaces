@@ -3,11 +3,15 @@ package babiy.findplaces.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -17,7 +21,7 @@ import babiy.findplaces.model.DataOfPlace;
 
 public class MyResultAdapter extends ArrayAdapter<DataOfPlace> {
 
-    List<DataOfPlace> placesList;
+    private List<DataOfPlace> placesList;
     Context context;
     private LayoutInflater placesInflater;
 
@@ -50,15 +54,19 @@ public class MyResultAdapter extends ArrayAdapter<DataOfPlace> {
         vh.textViewAddress.setText(item.getAddress());
         String open = item.getOpening();
 
-        if (open.equals("Open")){
+        if (open.equals("Open")) {
             vh.textViewOpening.setText(R.string.string_open);
             vh.textViewOpening.setTextColor(Color.GREEN);
         } else if (open.equals("Close")) {
             vh.textViewOpening.setText(R.string.string_close);
             vh.textViewOpening.setTextColor(Color.RED);
         }
-        vh.textViewRating.setText(item.getRating());
-        vh.textViewDistance.setText((int)item.getDistance() + " m");
+
+        vh.textViewDistance.setText((int) item.getDistance() + " m");
+        vh.ratingBar.setNumStars(5);
+        vh.ratingBar.setRating(Float.parseFloat(item.getRating()));
+        LayerDrawable stars = (LayerDrawable) vh.ratingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(ContextCompat.getColor(context, R.color.progressStar) , PorterDuff.Mode.SRC_ATOP);
 
         return vh.rootView;
     }
@@ -69,16 +77,16 @@ public class MyResultAdapter extends ArrayAdapter<DataOfPlace> {
         final TextView textViewName;
         final TextView textViewDistance;
         final TextView textViewOpening;
-        final TextView textViewRating;
+        final RatingBar ratingBar;
 
         private ViewHolder(LinearLayout rootView, TextView textViewAddress, TextView textViewName, TextView textViewDistance,
-                           TextView textViewOpening, TextView textViewRating) {
+                           TextView textViewOpening, RatingBar ratingBar) {
             this.rootView = rootView;
             this.textViewAddress = textViewAddress;
             this.textViewName = textViewName;
             this.textViewDistance = textViewDistance;
             this.textViewOpening = textViewOpening;
-            this.textViewRating = textViewRating;
+            this.ratingBar = ratingBar;
         }
 
         public static ViewHolder create(LinearLayout rootView) {
@@ -87,8 +95,10 @@ public class MyResultAdapter extends ArrayAdapter<DataOfPlace> {
             TextView textViewAddress = (TextView) rootView.findViewById(R.id.tvAddress);
             TextView textViewDistance = (TextView) rootView.findViewById(R.id.tvDistance);
             TextView textViewOpening = (TextView) rootView.findViewById(R.id.tvOpening);
-            TextView textViewRating = (TextView) rootView.findViewById(R.id.tvRating);
-            return new ViewHolder(rootView, textViewAddress, textViewName, textViewDistance, textViewOpening, textViewRating);
+
+            RatingBar ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
+            return new ViewHolder(rootView, textViewAddress, textViewName, textViewDistance,
+                    textViewOpening, ratingBar);
         }
 
     }
