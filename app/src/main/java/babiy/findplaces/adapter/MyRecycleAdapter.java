@@ -1,47 +1,84 @@
-/*
 package babiy.findplaces.adapter;
 
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
-import babiy.findplaces.R;
+import java.util.List;
 
-public class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleAdapter.DataOfPlaceViewHolder>{
+import babiy.findplaces.R;
+import babiy.findplaces.model.DataOfPlace;
+
+public class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleAdapter.DataOfPlaceViewHolder> {
+
+    List<DataOfPlace> dataOfPlaces;
+
+    public MyRecycleAdapter(List<DataOfPlace> dataOfPlaces) {
+        this.dataOfPlaces = dataOfPlaces;
+    }
 
     @Override
     public DataOfPlaceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cardview, parent, false);
+        DataOfPlaceViewHolder dvh = new DataOfPlaceViewHolder(v);
+        return dvh;
     }
 
     @Override
     public void onBindViewHolder(DataOfPlaceViewHolder holder, int position) {
 
+        holder.tvName.setText(dataOfPlaces.get(position).getName());
+        holder.tvAddress.setText(dataOfPlaces.get(position).getAddress());
+
+        String open = dataOfPlaces.get(position).getOpening();
+
+        if (open.equals("Open")) {
+            holder.tvOpening.setText(R.string.string_open);
+            holder.tvOpening.setTextColor(Color.GREEN);
+        } else if (open.equals("Close")) {
+            holder.tvOpening.setText(R.string.string_close);
+            holder.tvOpening.setTextColor(Color.RED);
+        }
+
+        holder.tvDistance.setText((int) dataOfPlaces.get(position).getDistance() + " m");
+        holder.ratingBar.setNumStars(5);
+        holder.ratingBar.setRating(Float.parseFloat(dataOfPlaces.get(position).getRating()));
+
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dataOfPlaces.size();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
     }
 
     public static class DataOfPlaceViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
-        TextView personName;
-        TextView personAge;
-        ImageView personPhoto;
+        TextView tvName;
+        TextView tvAddress;
+        TextView tvDistance;
+        TextView tvOpening;
+        RatingBar ratingBar;
 
         DataOfPlaceViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            personName = (TextView)itemView.findViewById(R.id.person_name);
-            personAge = (TextView)itemView.findViewById(R.id.person_age);
-            personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
+            cv = (CardView) itemView.findViewById(R.id.cv);
+            tvAddress = (TextView) itemView.findViewById(R.id.tvAddressCard);
+            tvName = (TextView) itemView.findViewById(R.id.tvNameCard);
+            tvDistance = (TextView) itemView.findViewById(R.id.tvDistanceCard);
+            tvOpening = (TextView) itemView.findViewById(R.id.tvOpeningCard);
+            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBarCard);
         }
     }
 
 }
-*/

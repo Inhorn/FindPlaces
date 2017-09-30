@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
+import babiy.findplaces.adapter.MyRecycleAdapter;
 import babiy.findplaces.adapter.MyResultAdapter;
 import babiy.findplaces.model.DataOfPlace;
 import babiy.findplaces.utils.DistanceComparator;
@@ -51,6 +53,7 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
     private ListView lvList;
     private MyResultAdapter adapter;
     private String language;
+    //MyRecycleAdapter rvadapter;
 
 
     @Override
@@ -62,7 +65,12 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
         lvList = (ListView) findViewById(R.id.lvDisplay);
         adapter = new MyResultAdapter(this, list);
         requestQueue = Volley.newRequestQueue(this);
-        lvList.setAdapter(adapter);
+       lvList.setAdapter(adapter);
+
+       // RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
+      //  rv.setHasFixedSize(true);
+     //   rvadapter = new MyRecycleAdapter(list);
+      //  rv.setAdapter(rvadapter);
 
 
         language = Locale.getDefault().getLanguage();
@@ -73,7 +81,9 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(true);
 
-        lvList.setVisibility(View.INVISIBLE);
+
+       lvList.setVisibility(View.INVISIBLE);
+
 
         lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -120,8 +130,9 @@ public class DisplayOfResultsActivity extends AppCompatActivity {
                             } else {
                                 nextPage = null;
                                 progressDialog.dismiss();
-                                lvList.setVisibility(View.VISIBLE);
+                               lvList.setVisibility(View.VISIBLE);
                                 adapter.notifyDataSetChanged();
+                               // rvadapter.notifyDataSetChanged();
                             }
 
                             JSONArray jsonArray = response.getJSONArray(Keys.KEY_RESULT);
